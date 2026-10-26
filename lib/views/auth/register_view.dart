@@ -74,7 +74,9 @@ class _RegisterFormState extends State<_RegisterForm> {
                 ),
                 TextFormField(
                   controller: _username,
-                  decoration: const InputDecoration(labelText: 'Nombre de usuario'),
+                  decoration: const InputDecoration(
+                    labelText: 'Nombre de usuario',
+                  ),
                   validator: vm.validateUsername,
                 ),
                 TextFormField(
@@ -85,10 +87,13 @@ class _RegisterFormState extends State<_RegisterForm> {
                 ),
                 TextFormField(
                   controller: _confirm,
-                  decoration: const InputDecoration(labelText: 'Confirmar contraseña'),
+                  decoration: const InputDecoration(
+                    labelText: 'Confirmar contraseña',
+                  ),
                   obscureText: true,
-                  validator: (v) =>
-                      v != _password.text ? 'Las contraseñas no coinciden.' : null,
+                  validator: (v) => v != _password.text
+                      ? 'Las contraseñas no coinciden.'
+                      : null,
                 ),
                 CheckboxListTile(
                   contentPadding: EdgeInsets.zero,
@@ -102,11 +107,15 @@ class _RegisterFormState extends State<_RegisterForm> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(
                       vm.errorMessage!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                   ),
                 ElevatedButton(
-                  onPressed: vm.isLoading || !vm.acceptedPrivacy ? null : () => _submit(vm),
+                  onPressed: vm.isLoading || !vm.acceptedPrivacy
+                      ? null
+                      : () => _submit(vm),
                   child: vm.isLoading
                       ? const SizedBox(
                           height: 20,

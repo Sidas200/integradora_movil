@@ -22,7 +22,12 @@ class _HomeViewState extends State<HomeView> {
   int _index = 0;
 
   static const _titles = ['Perfil', 'Partidas', 'Logros', 'Noticias'];
-  static const _pages = [_ProfileTab(), SavesView(), AchievementsView(), NewsView()];
+  static const _pages = [
+    _ProfileTab(),
+    SavesView(),
+    AchievementsView(),
+    NewsView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +49,10 @@ class _HomeViewState extends State<HomeView> {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.person), label: 'Perfil'),
           NavigationDestination(icon: Icon(Icons.save), label: 'Partidas'),
-          NavigationDestination(icon: Icon(Icons.emoji_events), label: 'Logros'),
+          NavigationDestination(
+            icon: Icon(Icons.emoji_events),
+            label: 'Logros',
+          ),
           NavigationDestination(icon: Icon(Icons.article), label: 'Noticias'),
         ],
       ),
@@ -70,7 +78,10 @@ class _ProfileTab extends StatelessWidget {
             return ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(a.username, style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  a.username,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 Text(a.email),
                 const SizedBox(height: 8),
                 Text('Cuenta creada: ${formatDate(a.createdAt)}'),
@@ -81,7 +92,10 @@ class _ProfileTab extends StatelessWidget {
                 _row('Tiempo de juego', formatDuration(s.playTimeSec)),
                 _row('Enemigos derrotados', '${s.enemiesDefeated}'),
                 _row('Objetos fabricados', '${s.itemsCrafted}'),
-                _row('Logros', '${s.achievementsUnlocked} / ${s.achievementsTotal}'),
+                _row(
+                  'Logros',
+                  '${s.achievementsUnlocked} / ${s.achievementsTotal}',
+                ),
                 _row('Última sesión', formatDate(s.lastSessionAt)),
               ],
             );
@@ -92,9 +106,9 @@ class _ProfileTab extends StatelessWidget {
   }
 
   Widget _row(String label, String value) => ListTile(
-        dense: true,
-        contentPadding: EdgeInsets.zero,
-        title: Text(label),
-        trailing: Text(value),
-      );
+    dense: true,
+    contentPadding: EdgeInsets.zero,
+    title: Text(label),
+    trailing: Text(value),
+  );
 }

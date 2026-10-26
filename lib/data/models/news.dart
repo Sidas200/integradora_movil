@@ -13,11 +13,11 @@ class NewsSummary {
   final DateTime publishedAt;
 
   factory NewsSummary.fromJson(Map<String, dynamic> json) => NewsSummary(
-        slug: json['slug'] as String,
-        title: json['title'] as String,
-        summary: json['summary'] as String,
-        publishedAt: DateTime.parse(json['publishedAt'] as String),
-      );
+    slug: json['slug'] as String,
+    title: json['title'] as String,
+    summary: json['summary'] as String,
+    publishedAt: DateTime.parse(json['publishedAt'] as String),
+  );
 }
 
 /// Detalle de una noticia (`GET /news/{slug}`).
@@ -34,10 +34,10 @@ class NewsPost extends NewsSummary {
   final String contentMd;
 
   factory NewsPost.fromJson(Map<String, dynamic> json) => NewsPost(
-        slug: json['slug'] as String,
-        title: json['title'] as String,
-        summary: json['summary'] as String,
-        publishedAt: DateTime.parse(json['publishedAt'] as String),
-        contentMd: json['contentMd'] as String,
-      );
+    slug: json['slug'] as String,
+    title: json['title'] as String,
+    summary: json['summary'] as String,
+    publishedAt: DateTime.parse(json['publishedAt'] as String),
+    contentMd: json['contentMd'] as String,
+  );
 }

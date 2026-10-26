@@ -29,11 +29,8 @@ class ApiException implements Exception {
     );
   }
 
-  factory ApiException.network(Object error) => ApiException(
-        status: 0,
-        code: 'NETWORK_ERROR',
-        detail: error.toString(),
-      );
+  factory ApiException.network(Object error) =>
+      ApiException(status: 0, code: 'NETWORK_ERROR', detail: error.toString());
 
   /// Mensaje en español para mostrar al usuario según el código.
   String get userMessage {
@@ -77,8 +74,8 @@ class FieldError {
   final String message;
 
   factory FieldError.fromJson(Map<String, dynamic> json) => FieldError(
-        field: json['field'] as String? ?? '',
-        code: json['code'] as String? ?? '',
-        message: json['message'] as String? ?? '',
-      );
+    field: json['field'] as String? ?? '',
+    code: json['code'] as String? ?? '',
+    message: json['message'] as String? ?? '',
+  );
 }

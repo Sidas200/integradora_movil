@@ -25,8 +25,12 @@ class _AppState extends State<App> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   late final TokenStorage _tokens = widget.tokenStorage ?? TokenStorage();
-  late final ApiClient _api = widget.apiClient ?? ApiClient(tokenStorage: _tokens);
-  late final AuthRepository _authRepo = AuthRepository(api: _api, tokens: _tokens);
+  late final ApiClient _api =
+      widget.apiClient ?? ApiClient(tokenStorage: _tokens);
+  late final AuthRepository _authRepo = AuthRepository(
+    api: _api,
+    tokens: _tokens,
+  );
   late final GameRepository _gameRepo = GameRepository(api: _api);
   late final SessionViewModel _session = SessionViewModel(_authRepo);
 

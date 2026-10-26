@@ -21,15 +21,15 @@ class Achievement {
   final DateTime? unlockedAt;
 
   factory Achievement.fromJson(Map<String, dynamic> json) => Achievement(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        description: json['description'] as String?,
-        iconKey: json['iconKey'] as String?,
-        hidden: json['hidden'] as bool? ?? false,
-        sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
-        unlocked: json['unlocked'] as bool? ?? false,
-        unlockedAt: json['unlockedAt'] == null
-            ? null
-            : DateTime.parse(json['unlockedAt'] as String),
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    description: json['description'] as String?,
+    iconKey: json['iconKey'] as String?,
+    hidden: json['hidden'] as bool? ?? false,
+    sortOrder: (json['sortOrder'] as num?)?.toInt() ?? 0,
+    unlocked: json['unlocked'] as bool? ?? false,
+    unlockedAt: json['unlockedAt'] == null
+        ? null
+        : DateTime.parse(json['unlockedAt'] as String),
+  );
 }
