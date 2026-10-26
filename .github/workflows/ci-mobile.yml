@@ -1,0 +1,122 @@
+# =====================================================================
+#  CI Mobile — Verificación y APK de la app móvil (Flutter)
+#  Reporte de parámetros de configuración, Tabla 29.
+#   - mobile-verify (check obligatorio): formato, análisis estático y pruebas.
+#     Corre en cada PR y push a dev/main. Meta: ≤ 10 minutos.
+#   - mobile-build-apk: APK de release apuntando a pruebas (API_BASE_URL_STAGING).
+#     Solo fuera de los PR (push a dev/main y ejecución manual).
+#  Sin filtro de rutas: el repo solo contiene la app, y un filtro en main
+#  ya dejó en el juego una fusión en verde sin compilar nada.
+# =====================================================================
+name: CI Mobile
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Misma versión que reporta `flutter --version` en los equipos del equipo.
+  # Para actualizar Flutter se cambia aquí y en release-mobile.yml en un PR.
+  FLUTTER_VERSION: '3.35.2'
+  JAVA_VERSION: '17'   # requerido por el Gradle de Android
+
+jobs:
+  verify:
+    name: mobile-verify            # check obligatorio para fusionar
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Versión de Flutter
+        run: flutter --version
+
+      - name: Dependencias (respetando pubspec.lock)
+        run: flutter pub get --enforce-lockfile
+
+      - name: Formato
+        run: |
+          if ! dart format --output=none --set-exit-if-changed lib test; then
+            echo "### ✘ Formato: ejecuta \`dart format lib test\` y vuelve a subir los cambios" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+      - name: Análisis estático (flutter_lints)
+        run: flutter analyze
+
+      - name: Pruebas
+        run: flutter test --coverage --reporter expanded
+
+      - name: Publicar cobertura
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-coverage
+          path: coverage/lcov.info
+          retention-days: 14
+          if-no-files-found: ignore
+
+  build:
+    name: mobile-build-apk
+    needs: verify
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0           # el versionCode es el número de commits
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get --enforce-lockfile
+
+      - name: Firma del APK
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: ./infra/scripts/mobile/write-signing-config.sh
+
+      - name: Compilar APK (ambiente de pruebas)
+        env:
+          API_BASE_URL: ${{ vars.API_BASE_URL_STAGING }}
+        run: |
+          ./infra/scripts/mobile/build-apk.sh \
+            "tdimp-mobile-${GITHUB_REF_NAME//\//-}-${GITHUB_SHA::7}.apk"
+
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-apk
+          path: artifacts/*.apk
+          retention-days: ${{ github.ref_name == 'main' && 90 || 7 }}
+          if-no-files-found: error
