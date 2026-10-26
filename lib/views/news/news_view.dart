@@ -24,7 +24,10 @@ class NewsView extends StatelessWidget {
                 children: const [
                   Padding(
                     padding: EdgeInsets.all(32),
-                    child: Text('No hay noticias publicadas.', textAlign: TextAlign.center),
+                    child: Text(
+                      'No hay noticias publicadas.',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ],
               );
@@ -44,7 +47,9 @@ class NewsView extends StatelessWidget {
                   subtitle: Text('${formatDate(n.publishedAt)}\n${n.summary}'),
                   isThreeLine: true,
                   onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => NewsDetailView(slug: n.slug)),
+                    MaterialPageRoute(
+                      builder: (_) => NewsDetailView(slug: n.slug),
+                    ),
                   ),
                 );
               },
@@ -64,7 +69,8 @@ class NewsDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (ctx) => NewsDetailViewModel(ctx.read<GameRepository>(), slug)..load(),
+      create: (ctx) =>
+          NewsDetailViewModel(ctx.read<GameRepository>(), slug)..load(),
       child: Scaffold(
         appBar: AppBar(title: const Text('Noticia')),
         body: Consumer<NewsDetailViewModel>(

@@ -12,7 +12,8 @@ class AchievementsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (ctx) => AchievementsViewModel(ctx.read<GameRepository>())..load(),
+      create: (ctx) =>
+          AchievementsViewModel(ctx.read<GameRepository>())..load(),
       child: Consumer<AchievementsViewModel>(
         builder: (context, vm, _) => AsyncBody(
           viewModel: vm,
@@ -22,7 +23,9 @@ class AchievementsView extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
-                child: Text('Desbloqueados: ${vm.unlockedCount} / ${vm.achievements.length}'),
+                child: Text(
+                  'Desbloqueados: ${vm.unlockedCount} / ${vm.achievements.length}',
+                ),
               ),
               for (final a in vm.achievements)
                 ListTile(
@@ -31,7 +34,8 @@ class AchievementsView extends StatelessWidget {
                   subtitle: Text(
                     [
                       if (a.description != null) a.description!,
-                      if (a.unlocked) 'Desbloqueado: ${formatDate(a.unlockedAt)}',
+                      if (a.unlocked)
+                        'Desbloqueado: ${formatDate(a.unlockedAt)}',
                     ].join('\n'),
                   ),
                 ),

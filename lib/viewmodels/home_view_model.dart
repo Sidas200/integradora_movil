@@ -12,6 +12,6 @@ class HomeViewModel extends BaseViewModel {
   Account? get account => _account;
 
   Future<void> load() => runTask(() async {
-        _account = await _repo.getAccount();
-      });
+    _account = await _repo.getAccount();
+  });
 }

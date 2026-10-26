@@ -79,7 +79,9 @@ class _LoginFormState extends State<_LoginForm> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Text(
                       vm.errorMessage!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
                     ),
                   ),
                 ElevatedButton(
@@ -96,8 +98,10 @@ class _LoginFormState extends State<_LoginForm> {
                   onPressed: vm.isLoading
                       ? null
                       : () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const RegisterView()),
+                          MaterialPageRoute(
+                            builder: (_) => const RegisterView(),
                           ),
+                        ),
                   child: const Text('Crear cuenta'),
                 ),
               ],

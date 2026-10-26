@@ -1,0 +1,94 @@
+# =====================================================================
+#  Release Mobile — Publicación de una versión de la app (APK de producción)
+#  Se dispara al empujar un tag vMAYOR.MENOR.PARCHE sobre main:
+#      git switch main && git pull && git tag v1.0.0 && git push origin v1.0.0
+#  A diferencia del juego, el APK SÍ se recompila: la URL de la API se fija
+#  en tiempo de compilación (--dart-define), así que el APK de pruebas no
+#  sirve para producción. Se compila el mismo commit que ya pasó mobile-verify.
+#  1. Verifica que el tag apunte a un commit de main.
+#  2. Exige la variable API_BASE_URL_PROD (un APK de producción no puede
+#     apuntar a pruebas por omisión).
+#  3. Pruebas, firma con el keystore de liberación y compilación.
+#  4. Crea el GitHub Release con notas generadas desde los PR.
+# =====================================================================
+name: Release Mobile
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write      # crear el release
+
+env:
+  FLUTTER_VERSION: '3.35.2'   # igual que ci-mobile.yml
+  JAVA_VERSION: '17'
+
+jobs:
+  release:
+    name: publish-release
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      VERSION: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: El tag debe estar sobre main
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
+            echo "✘ $VERSION no apunta a un commit de main; las versiones solo salen de main." >&2
+            exit 1
+          fi
+
+      - name: Configuración de producción
+        env:
+          API_BASE_URL_PROD: ${{ vars.API_BASE_URL_PROD }}
+        run: |
+          if [ -z "$API_BASE_URL_PROD" ]; then
+            echo "✘ Falta la variable API_BASE_URL_PROD (Settings › Secrets and variables › Actions › Variables)." >&2
+            exit 1
+          fi
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get --enforce-lockfile
+
+      - name: Pruebas
+        run: flutter test
+
+      - name: Firma del APK
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: ./infra/scripts/mobile/write-signing-config.sh
+
+      - name: Compilar APK de producción
+        env:
+          API_BASE_URL: ${{ vars.API_BASE_URL_PROD }}
+        run: ./infra/scripts/mobile/build-apk.sh "tdimp-android-${VERSION}.apk" "${VERSION#v}"
+
+      - name: Crear GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.VERSION }}
+          name: The Day I Made That Promise (Android) ${{ env.VERSION }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: artifacts/*.apk

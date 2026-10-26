@@ -31,7 +31,10 @@ class AsyncBody extends StatelessWidget {
             children: [
               Text(viewModel.errorMessage!, textAlign: TextAlign.center),
               const SizedBox(height: 12),
-              ElevatedButton(onPressed: onRetry, child: const Text('Reintentar')),
+              ElevatedButton(
+                onPressed: onRetry,
+                child: const Text('Reintentar'),
+              ),
             ],
           ),
         ),

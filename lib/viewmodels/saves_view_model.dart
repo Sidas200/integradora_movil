@@ -12,6 +12,6 @@ class SavesViewModel extends BaseViewModel {
   List<SaveSummary> get saves => _saves;
 
   Future<void> load() => runTask(() async {
-        _saves = await _repo.getSaves();
-      });
+    _saves = await _repo.getSaves();
+  });
 }

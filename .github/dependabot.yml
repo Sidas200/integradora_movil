@@ -1,0 +1,9 @@
+# Dependabot: abre PRs semanales hacia dev para actualizar las Actions de los workflows.
+# (Las dependencias de Dart se actualizan a mano con `flutter pub upgrade` y se fijan en pubspec.lock.)
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "dev"
+    schedule: { interval: "weekly", day: "monday" }
+    commit-message: { prefix: "ci" }

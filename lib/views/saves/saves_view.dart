@@ -40,7 +40,9 @@ class SavesView extends StatelessWidget {
                 final s = vm.saves[i];
                 return ListTile(
                   leading: CircleAvatar(child: Text('${s.slot}')),
-                  title: Text('Ranura ${s.slot} · ${s.activeCharacter} · Capítulo ${s.currentChapter}'),
+                  title: Text(
+                    'Ranura ${s.slot} · ${s.activeCharacter} · Capítulo ${s.currentChapter}',
+                  ),
                   subtitle: Text(
                     'Hitos: ${s.milestonesCompleted}/${s.milestonesTotal}'
                     '${s.lastMilestoneTitle != null ? ' · Último: ${s.lastMilestoneTitle}' : ''}\n'
