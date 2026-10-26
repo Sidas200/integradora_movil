@@ -85,7 +85,7 @@ jobs:
         run: ./infra/scripts/mobile/build-apk.sh "tdimp-android-${VERSION}.apk" "${VERSION#v}"
 
       - name: Crear GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ env.VERSION }}
           name: The Day I Made That Promise (Android) ${{ env.VERSION }}
