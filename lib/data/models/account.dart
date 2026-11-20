@@ -17,13 +17,13 @@ class Account {
   final AccountSummary summary;
 
   factory Account.fromJson(Map<String, dynamic> json) => Account(
-        id: json['id'] as String,
-        username: json['username'] as String,
-        email: json['email'] as String,
-        createdAt: DateTime.parse(json['createdAt'] as String),
-        lastLoginAt: _date(json['lastLoginAt']),
-        summary: AccountSummary.fromJson(json['summary'] as Map<String, dynamic>),
-      );
+    id: json['id'] as String,
+    username: json['username'] as String,
+    email: json['email'] as String,
+    createdAt: DateTime.parse(json['createdAt'] as String),
+    lastLoginAt: _date(json['lastLoginAt']),
+    summary: AccountSummary.fromJson(json['summary'] as Map<String, dynamic>),
+  );
 }
 
 class AccountSummary {
@@ -46,14 +46,15 @@ class AccountSummary {
   final DateTime? lastSessionAt;
 
   factory AccountSummary.fromJson(Map<String, dynamic> json) => AccountSummary(
-        saves: (json['saves'] as num).toInt(),
-        playTimeSec: (json['playTimeSec'] as num).toInt(),
-        enemiesDefeated: (json['enemiesDefeated'] as num).toInt(),
-        itemsCrafted: (json['itemsCrafted'] as num).toInt(),
-        achievementsUnlocked: (json['achievementsUnlocked'] as num).toInt(),
-        achievementsTotal: (json['achievementsTotal'] as num).toInt(),
-        lastSessionAt: _date(json['lastSessionAt']),
-      );
+    saves: (json['saves'] as num).toInt(),
+    playTimeSec: (json['playTimeSec'] as num).toInt(),
+    enemiesDefeated: (json['enemiesDefeated'] as num).toInt(),
+    itemsCrafted: (json['itemsCrafted'] as num).toInt(),
+    achievementsUnlocked: (json['achievementsUnlocked'] as num).toInt(),
+    achievementsTotal: (json['achievementsTotal'] as num).toInt(),
+    lastSessionAt: _date(json['lastSessionAt']),
+  );
 }
 
-DateTime? _date(Object? value) => value == null ? null : DateTime.parse(value as String);
+DateTime? _date(Object? value) =>
+    value == null ? null : DateTime.parse(value as String);
