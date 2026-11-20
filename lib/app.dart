@@ -3,11 +3,14 @@ import 'package:provider/provider.dart';
 
 import 'core/network/api_client.dart';
 import 'core/storage/token_storage.dart';
+import 'core/theme/app_theme.dart';
+import 'core/theme/theme_controller.dart';
 import 'data/repositories/auth_repository.dart';
 import 'data/repositories/game_repository.dart';
 import 'viewmodels/session_view_model.dart';
 import 'views/auth/login_view.dart';
 import 'views/home/home_view.dart';
+import 'views/widgets/app_widgets.dart';
 
 /// Crea las dependencias y las expone con Provider.
 class App extends StatefulWidget {
@@ -33,6 +36,7 @@ class _AppState extends State<App> {
   );
   late final GameRepository _gameRepo = GameRepository(api: _api);
   late final SessionViewModel _session = SessionViewModel(_authRepo);
+  final _theme = ThemeController();
 
   @override
   void initState() {
@@ -51,6 +55,7 @@ class _AppState extends State<App> {
   void dispose() {
     _session.removeListener(_onSessionChanged);
     _session.dispose();
+    _theme.dispose();
     super.dispose();
   }
 
@@ -61,12 +66,18 @@ class _AppState extends State<App> {
         Provider.value(value: _authRepo),
         Provider.value(value: _gameRepo),
         ChangeNotifierProvider.value(value: _session),
+        ChangeNotifierProvider.value(value: _theme),
       ],
-      child: MaterialApp(
-        title: 'TDIMP',
-        navigatorKey: _navigatorKey,
-        debugShowCheckedModeBanner: false,
-        home: const _Root(),
+      child: Consumer<ThemeController>(
+        builder: (context, theme, _) => MaterialApp(
+          title: 'TDIMTP',
+          navigatorKey: _navigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: buildAppTheme(AppPalette.light),
+          darkTheme: buildAppTheme(AppPalette.dark),
+          themeMode: theme.mode,
+          home: const _Root(),
+        ),
       ),
     );
   }
@@ -80,7 +91,28 @@ class _Root extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (context.watch<SessionViewModel>().status) {
       case SessionStatus.unknown:
-        return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        return const Scaffold(
+          body: SkyBackdrop(
+            petals: 12,
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BrandWordmark(height: 150),
+                    SizedBox(height: 28),
+                    SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: CircularProgressIndicator(strokeWidth: 3),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
       case SessionStatus.authenticated:
         return const HomeView();
       case SessionStatus.unauthenticated:

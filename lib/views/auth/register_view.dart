@@ -4,6 +4,9 @@ import 'package:provider/provider.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../viewmodels/register_view_model.dart';
 import '../../viewmodels/session_view_model.dart';
+import '../../core/theme/app_theme.dart';
+import '../widgets/app_widgets.dart';
+import 'auth_shell.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
@@ -56,76 +59,111 @@ class _RegisterFormState extends State<_RegisterForm> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<RegisterViewModel>();
-    return Scaffold(
-      appBar: AppBar(title: const Text('Crear cuenta')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
+    final p = context.palette;
+    return AuthShell(
+      sprite: AppArt.hikari,
+      showBack: true,
+      artTitle: 'Empieza tu viaje',
+      artText:
+          'Crea tu cuenta y tus partidas se guardarán en la nube mientras juegas.',
+      child: Form(
+        key: _formKey,
+        child: AutofillGroup(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const PageHeader(title: 'Crear cuenta', eyebrow: 'Mi cuenta'),
+              FieldLabel(
+                'Correo',
+                child: TextFormField(
                   controller: _email,
-                  decoration: const InputDecoration(labelText: 'Correo'),
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.email],
                   validator: vm.validateEmail,
                 ),
-                TextFormField(
+              ),
+              FieldLabel(
+                'Nombre de jugador',
+                hint:
+                    'De 3 a 20 letras, números o guion bajo. Así te verán en el juego.',
+                child: TextFormField(
                   controller: _username,
-                  decoration: const InputDecoration(
-                    labelText: 'Nombre de usuario',
-                  ),
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.newUsername],
                   validator: vm.validateUsername,
                 ),
-                TextFormField(
+              ),
+              FieldLabel(
+                'Contraseña',
+                hint: 'Entre 8 y 72 caracteres.',
+                child: TextFormField(
                   controller: _password,
-                  decoration: const InputDecoration(labelText: 'Contraseña'),
                   obscureText: true,
+                  textInputAction: TextInputAction.next,
+                  autofillHints: const [AutofillHints.newPassword],
                   validator: vm.validatePassword,
                 ),
-                TextFormField(
+              ),
+              FieldLabel(
+                'Repite la contraseña',
+                child: TextFormField(
                   controller: _confirm,
-                  decoration: const InputDecoration(
-                    labelText: 'Confirmar contraseña',
-                  ),
                   obscureText: true,
                   validator: (v) => v != _password.text
                       ? 'Las contraseñas no coinciden.'
                       : null,
                 ),
-                CheckboxListTile(
-                  contentPadding: EdgeInsets.zero,
-                  value: vm.acceptedPrivacy,
-                  onChanged: (v) => vm.setAcceptedPrivacy(v ?? false),
-                  title: const Text('Acepto el aviso de privacidad'),
-                  controlAffinity: ListTileControlAffinity.leading,
-                ),
-                if (vm.errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      vm.errorMessage!,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
+              ),
+              InkWell(
+                borderRadius: BorderRadius.circular(AppRadius.m),
+                onTap: () => vm.setAcceptedPrivacy(!vm.acceptedPrivacy),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: vm.acceptedPrivacy,
+                        onChanged: (v) => vm.setAcceptedPrivacy(v ?? false),
                       ),
-                    ),
+                      const SizedBox(width: 4),
+                      const Expanded(
+                        child: Text(
+                          'Acepto el aviso de privacidad',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
                   ),
-                ElevatedButton(
-                  onPressed: vm.isLoading || !vm.acceptedPrivacy
-                      ? null
-                      : () => _submit(vm),
-                  child: vm.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Registrarme'),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              if (vm.errorMessage != null) AlertBox(vm.errorMessage!),
+              AppButton(
+                label: 'Crear mi cuenta',
+                loadingLabel: 'Creando cuenta…',
+                expand: true,
+                height: 52,
+                loading: vm.isLoading,
+                onPressed: vm.acceptedPrivacy ? () => _submit(vm) : null,
+              ),
+              AuthSwitch(
+                question: '¿Ya tienes cuenta?',
+                action: 'Inicia sesión',
+                onTap: vm.isLoading
+                    ? null
+                    : () => Navigator.of(context).maybePop(),
+              ),
+              if (!vm.acceptedPrivacy)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Acepta el aviso de privacidad para crear tu cuenta.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 12.5, color: p.textMuted),
+                  ),
+                ),
+            ],
           ),
         ),
       ),
