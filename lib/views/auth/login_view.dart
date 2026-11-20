@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../viewmodels/login_view_model.dart';
 import '../../viewmodels/session_view_model.dart';
+import '../widgets/app_widgets.dart';
+import 'auth_shell.dart';
 import 'register_view.dart';
 
 class LoginView extends StatelessWidget {
@@ -48,63 +50,72 @@ class _LoginFormState extends State<_LoginForm> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<LoginViewModel>();
-    return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar sesión')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TextFormField(
+    return AuthShell(
+      sprite: AppArt.tsuki,
+      artTitle: 'Tu promesa te espera',
+      artText:
+          'Entra para ver tus partidas, logros y noticias desde cualquier lugar.',
+      child: Form(
+        key: _formKey,
+        child: AutofillGroup(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const PageHeader(title: 'Iniciar sesión', eyebrow: 'Mi cuenta'),
+              FieldLabel(
+                'Correo',
+                child: TextFormField(
                   controller: _email,
-                  decoration: const InputDecoration(labelText: 'Correo'),
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   autofillHints: const [AutofillHints.email],
+                  maxLength: 254,
+                  buildCounter: _noCounter,
                   validator: vm.validateEmail,
                 ),
-                TextFormField(
+              ),
+              FieldLabel(
+                'Contraseña',
+                child: TextFormField(
                   controller: _password,
-                  decoration: const InputDecoration(labelText: 'Contraseña'),
                   obscureText: true,
+                  maxLength: 72,
+                  buildCounter: _noCounter,
                   autofillHints: const [AutofillHints.password],
                   validator: vm.validatePassword,
                   onFieldSubmitted: (_) => _submit(vm),
                 ),
-                const SizedBox(height: 16),
-                if (vm.errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      vm.errorMessage!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
-                    ),
-                  ),
-                ElevatedButton(
-                  onPressed: vm.isLoading ? null : () => _submit(vm),
-                  child: vm.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Entrar'),
-                ),
-                TextButton(
-                  onPressed: vm.isLoading
-                      ? null
-                      : () => Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => const RegisterView()),
-                          ),
-                  child: const Text('Crear cuenta'),
-                ),
-              ],
-            ),
+              ),
+              if (vm.errorMessage != null) AlertBox(vm.errorMessage!),
+              const SizedBox(height: 4),
+              AppButton(
+                label: 'Entrar',
+                loadingLabel: 'Entrando…',
+                expand: true,
+                height: 52,
+                loading: vm.isLoading,
+                onPressed: () => _submit(vm),
+              ),
+              AuthSwitch(
+                question: '¿No tienes cuenta?',
+                action: 'Crea una aquí',
+                onTap: vm.isLoading
+                    ? null
+                    : () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const RegisterView()),
+                      ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
+Widget? _noCounter(
+  BuildContext context, {
+  required int currentLength,
+  required bool isFocused,
+  required int? maxLength,
+}) => null;
