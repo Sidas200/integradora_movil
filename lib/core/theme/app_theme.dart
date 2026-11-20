@@ -89,7 +89,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   static const light = AppPalette(
     brightness: Brightness.light,
-    sky: [Color(0xFFFBF0F7), Color(0xFFEEDFF4), Color(0xFFD9D6F6), Color(0xFFC9D4F2)],
+    sky: [
+      Color(0xFFFBF0F7),
+      Color(0xFFEEDFF4),
+      Color(0xFFD9D6F6),
+      Color(0xFFC9D4F2),
+    ],
     skyBlobs: [Color(0x8CFFBEDE), Color(0x8CBEC8FF), Color(0x99CDE0DA)],
     bg: Color(0xFFF6EEF6),
     glass: Color(0xB8FFFFFF),
@@ -138,7 +143,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
 
   static const dark = AppPalette(
     brightness: Brightness.dark,
-    sky: [Color(0xFF0C1226), Color(0xFF161734), Color(0xFF241F4A), Color(0xFF2E2558)],
+    sky: [
+      Color(0xFF0C1226),
+      Color(0xFF161734),
+      Color(0xFF241F4A),
+      Color(0xFF2E2558),
+    ],
     skyBlobs: [Color(0x29FF6FAE), Color(0x337864FF), Color(0x1F50A0FF)],
     bg: Color(0xFF10182B),
     glass: Color(0xB81E2442),
@@ -174,7 +184,11 @@ class AppPalette extends ThemeExtension<AppPalette> {
     ],
     shadowLift: [
       BoxShadow(color: Color(0x59000000), offset: Offset(0, 2), blurRadius: 4),
-      BoxShadow(color: Color(0x4D000000), offset: Offset(0, 10), blurRadius: 24),
+      BoxShadow(
+        color: Color(0x4D000000),
+        offset: Offset(0, 10),
+        blurRadius: 24,
+      ),
     ],
     glowPromise: [
       BoxShadow(color: Color(0x80FF6FAE), spreadRadius: 1),

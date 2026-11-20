@@ -75,7 +75,10 @@ class AuthShell extends StatelessWidget {
                                         right: 0,
                                         bottom: 14,
                                         child: Center(
-                                          child: FloatingSprite(sprite, height: 100),
+                                          child: FloatingSprite(
+                                            sprite,
+                                            height: 100,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -84,11 +87,20 @@ class AuthShell extends StatelessWidget {
                                 ColoredBox(
                                   color: p.glassStrong,
                                   child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
+                                    padding: const EdgeInsets.fromLTRB(
+                                      22,
+                                      22,
+                                      22,
+                                      22,
+                                    ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
                                       children: [
-                                        _ArtCopy(title: artTitle, text: artText),
+                                        _ArtCopy(
+                                          title: artTitle,
+                                          text: artText,
+                                        ),
                                         const SizedBox(height: 24),
                                         child,
                                       ],
@@ -205,14 +217,20 @@ class FieldLabel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(text, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+          Text(
+            text,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+          ),
           const SizedBox(height: 6),
           child,
           if (hint != null) ...[
             const SizedBox(height: 4),
             Text(
               hint!,
-              style: TextStyle(fontSize: 12.5, color: context.palette.textMuted),
+              style: TextStyle(
+                fontSize: 12.5,
+                color: context.palette.textMuted,
+              ),
             ),
           ],
         ],
@@ -240,7 +258,9 @@ class AuthSwitch extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 24),
       padding: const EdgeInsets.only(top: 12),
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: p.line))),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: p.line)),
+      ),
       child: Wrap(
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,

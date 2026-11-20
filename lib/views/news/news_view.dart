@@ -36,7 +36,8 @@ class NewsView extends StatelessWidget {
               if (vm.items.isEmpty)
                 const EmptyState(
                   title: 'Todavía no hay noticias',
-                  text: 'Vuelve pronto: aquí publicaremos los avances del juego.',
+                  text:
+                      'Vuelve pronto: aquí publicaremos los avances del juego.',
                 ),
               for (final (i, n) in vm.items.indexed)
                 Padding(
@@ -117,11 +118,18 @@ class _NewsCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     news.summary,
-                    style: TextStyle(color: p.textMuted, fontSize: 14, height: 1.5),
+                    style: TextStyle(
+                      color: p.textMuted,
+                      fontSize: 14,
+                      height: 1.5,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: p.promiseSoft,
                       borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -138,7 +146,11 @@ class _NewsCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        Icon(Icons.north_east_rounded, size: 15, color: p.promise),
+                        Icon(
+                          Icons.north_east_rounded,
+                          size: 15,
+                          color: p.promise,
+                        ),
                       ],
                     ),
                   ),
@@ -162,7 +174,8 @@ class NewsDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     final (cover, focus) = AppArt.coverOf(slug);
     return ChangeNotifierProvider(
-      create: (ctx) => NewsDetailViewModel(ctx.read<GameRepository>(), slug)..load(),
+      create: (ctx) =>
+          NewsDetailViewModel(ctx.read<GameRepository>(), slug)..load(),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -192,16 +205,25 @@ class NewsDetailView extends StatelessWidget {
                           boxShadow: p.shadowGlass,
                         ),
                         clipBehavior: Clip.antiAlias,
-                        child: PixelImage(cover, fit: BoxFit.cover, alignment: focus),
+                        child: PixelImage(
+                          cover,
+                          fit: BoxFit.cover,
+                          alignment: focus,
+                        ),
                       ),
                       PageHeader(
                         title: post.title,
-                        eyebrow: 'Publicada el ${formatLongDate(post.publishedAt)}',
+                        eyebrow:
+                            'Publicada el ${formatLongDate(post.publishedAt)}',
                       ),
                       Glass(
                         child: SelectableText(
                           post.contentMd,
-                          style: TextStyle(height: 1.8, color: p.text, fontSize: 15.5),
+                          style: TextStyle(
+                            height: 1.8,
+                            color: p.text,
+                            fontSize: 15.5,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),

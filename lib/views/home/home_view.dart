@@ -65,7 +65,8 @@ class _PlayerBand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    final username = context.select<SessionViewModel, String?>((s) => s.username) ?? '';
+    final username =
+        context.select<SessionViewModel, String?>((s) => s.username) ?? '';
     return Glass(
       padding: EdgeInsets.zero,
       borderColor: p.line,
@@ -143,7 +144,9 @@ class _DashboardTab extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final p = context.palette;
-          final username = context.select<SessionViewModel, String?>((s) => s.username);
+          final username = context.select<SessionViewModel, String?>(
+            (s) => s.username,
+          );
           return RefreshIndicator(
             onRefresh: () => Future.wait([
               context.read<HomeViewModel>().load(),
@@ -172,7 +175,10 @@ class _DashboardTab extends StatelessWidget {
                 ),
                 const Rise(child: _LastSave()),
                 const SizedBox(height: 20),
-                const Rise(delay: Duration(milliseconds: 120), child: _Summary()),
+                const Rise(
+                  delay: Duration(milliseconds: 120),
+                  child: _Summary(),
+                ),
               ],
             ),
           );
@@ -193,7 +199,8 @@ class _LastSave extends StatelessWidget {
     for (final s in vm.saves) {
       if (save == null || s.updatedAt.isAfter(save.updatedAt)) save = s;
     }
-    final loaded = vm.saves.isNotEmpty || (!vm.isLoading && vm.errorMessage == null);
+    final loaded =
+        vm.saves.isNotEmpty || (!vm.isLoading && vm.errorMessage == null);
 
     Widget content;
     if (!loaded && vm.errorMessage != null) {
@@ -238,7 +245,10 @@ class _LastSave extends StatelessWidget {
                 children: [
                   Container(
                     margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 3,
+                    ),
                     decoration: BoxDecoration(
                       color: p.promiseSoft,
                       borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -289,7 +299,10 @@ class _LastSaveBody extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            AppChip(characterLabel(save.activeCharacter), tone: ChipTone.promise),
+            AppChip(
+              characterLabel(save.activeCharacter),
+              tone: ChipTone.promise,
+            ),
             AppChip(chapterLabel(save.currentChapter), tone: ChipTone.primary),
             AppChip(
               formatDuration(save.playTimeSec),
@@ -352,7 +365,10 @@ class _PlayButton extends StatelessWidget {
                 const SizedBox(width: 12),
                 Text(
                   label,
-                  style: TextStyle(color: p.onPromise, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                    color: p.onPromise,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ),
@@ -386,10 +402,16 @@ class _Summary extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WidgetTitle('Tu progreso', icon: Icons.sports_esports_outlined),
+              const WidgetTitle(
+                'Tu progreso',
+                icon: Icons.sports_esports_outlined,
+              ),
               Container(
                 margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 11,
+                  vertical: 3,
+                ),
                 decoration: BoxDecoration(
                   color: p.glassInset,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -398,7 +420,11 @@ class _Summary extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.calendar_month_outlined, size: 14, color: p.textMuted),
+                    Icon(
+                      Icons.calendar_month_outlined,
+                      size: 14,
+                      color: p.textMuted,
+                    ),
                     const SizedBox(width: 6),
                     Flexible(
                       child: Text(
@@ -417,52 +443,65 @@ class _Summary extends StatelessWidget {
                     spacing: 12,
                     runSpacing: 12,
                     children: [
-                      tile(StatTile(
-                        icon: Icons.save_outlined,
-                        label: 'Partidas',
-                        value: '${s.saves}',
-                        tone: p.primary,
-                        toneSoft: p.primarySoft,
-                      )),
-                      tile(StatTile(
-                        icon: Icons.schedule_rounded,
-                        label: 'Tiempo de juego',
-                        value: formatDuration(s.playTimeSec),
-                        tone: p.hud,
-                        toneSoft: p.blue,
-                      )),
-                      tile(StatTile(
-                        icon: Icons.flash_on_rounded,
-                        label: 'Enemigos derrotados',
-                        value: '${s.enemiesDefeated}',
-                        tone: p.promise,
-                        toneSoft: p.promiseSoft,
-                      )),
-                      tile(StatTile(
-                        icon: Icons.handyman_outlined,
-                        label: 'Objetos fabricados',
-                        value: '${s.itemsCrafted}',
-                        tone: p.success,
-                        toneSoft: p.mint,
-                      )),
-                      tile(StatTile(
-                        icon: Icons.emoji_events_outlined,
-                        label: 'Logros',
-                        value: '${s.achievementsUnlocked} de ${s.achievementsTotal}',
-                        tone: p.onGold,
-                        toneSoft: p.gold.withValues(alpha: 0.45),
-                        ring: pct,
-                      )),
-                      tile(StatTile(
-                        icon: Icons.history_rounded,
-                        label: 'Última sesión',
-                        value: s.lastSessionAt == null
-                            ? 'Todavía no juegas'
-                            : formatLongDate(s.lastSessionAt),
-                        tone: p.textMuted,
-                        toneSoft: p.glassInset,
-                        smallValue: true,
-                      )),
+                      tile(
+                        StatTile(
+                          icon: Icons.save_outlined,
+                          label: 'Partidas',
+                          value: '${s.saves}',
+                          tone: p.primary,
+                          toneSoft: p.primarySoft,
+                        ),
+                      ),
+                      tile(
+                        StatTile(
+                          icon: Icons.schedule_rounded,
+                          label: 'Tiempo de juego',
+                          value: formatDuration(s.playTimeSec),
+                          tone: p.hud,
+                          toneSoft: p.blue,
+                        ),
+                      ),
+                      tile(
+                        StatTile(
+                          icon: Icons.flash_on_rounded,
+                          label: 'Enemigos derrotados',
+                          value: '${s.enemiesDefeated}',
+                          tone: p.promise,
+                          toneSoft: p.promiseSoft,
+                        ),
+                      ),
+                      tile(
+                        StatTile(
+                          icon: Icons.handyman_outlined,
+                          label: 'Objetos fabricados',
+                          value: '${s.itemsCrafted}',
+                          tone: p.success,
+                          toneSoft: p.mint,
+                        ),
+                      ),
+                      tile(
+                        StatTile(
+                          icon: Icons.emoji_events_outlined,
+                          label: 'Logros',
+                          value:
+                              '${s.achievementsUnlocked} de ${s.achievementsTotal}',
+                          tone: p.onGold,
+                          toneSoft: p.gold.withValues(alpha: 0.45),
+                          ring: pct,
+                        ),
+                      ),
+                      tile(
+                        StatTile(
+                          icon: Icons.history_rounded,
+                          label: 'Última sesión',
+                          value: s.lastSessionAt == null
+                              ? 'Todavía no juegas'
+                              : formatLongDate(s.lastSessionAt),
+                          tone: p.textMuted,
+                          toneSoft: p.glassInset,
+                          smallValue: true,
+                        ),
+                      ),
                     ],
                   );
                 },
@@ -542,7 +581,10 @@ class StatTile extends StatelessWidget {
                   child: Text(
                     value,
                     style: smallValue
-                        ? const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)
+                        ? const TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          )
                         : const TextStyle(
                             fontFamily: AppFonts.pixel,
                             fontSize: 26,
@@ -574,7 +616,13 @@ class _Ring extends StatelessWidget {
       height: 46,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        boxShadow: [BoxShadow(color: p.gold.withValues(alpha: 0.4), blurRadius: 18, offset: const Offset(0, 6))],
+        boxShadow: [
+          BoxShadow(
+            color: p.gold.withValues(alpha: 0.4),
+            blurRadius: 18,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Stack(
         alignment: Alignment.center,

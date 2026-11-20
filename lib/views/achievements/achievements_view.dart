@@ -18,7 +18,8 @@ class AchievementsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (ctx) => AchievementsViewModel(ctx.read<GameRepository>())..load(),
+      create: (ctx) =>
+          AchievementsViewModel(ctx.read<GameRepository>())..load(),
       child: Consumer<AchievementsViewModel>(
         builder: (context, vm, _) => AsyncBody(
           viewModel: vm,
@@ -78,7 +79,10 @@ class _Quest extends StatelessWidget {
               Expanded(
                 child: Text(
                   '$unlocked de $total logros desbloqueados',
-                  style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
               Text(
@@ -93,7 +97,10 @@ class _Quest extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          GradientProgress(value: total == 0 ? 0 : unlocked / total, height: 14),
+          GradientProgress(
+            value: total == 0 ? 0 : unlocked / total,
+            height: 14,
+          ),
           const SizedBox(height: 14),
           Wrap(
             spacing: 8,
@@ -115,13 +122,23 @@ class _Quest extends StatelessWidget {
                     color: i < unlocked ? null : p.glass,
                     border: i < unlocked
                         ? Border.all(color: p.gold.withValues(alpha: 0.7))
-                        : Border.all(color: p.controlBorder.withValues(alpha: 0.6)),
+                        : Border.all(
+                            color: p.controlBorder.withValues(alpha: 0.6),
+                          ),
                     boxShadow: i < unlocked
-                        ? [BoxShadow(color: p.gold.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 3))]
+                        ? [
+                            BoxShadow(
+                              color: p.gold.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 3),
+                            ),
+                          ]
                         : null,
                   ),
                   child: Icon(
-                    i < unlocked ? Icons.emoji_events_rounded : Icons.lock_outline_rounded,
+                    i < unlocked
+                        ? Icons.emoji_events_rounded
+                        : Icons.lock_outline_rounded,
                     size: 17,
                     color: i < unlocked ? Colors.white : p.textMuted,
                   ),
@@ -153,7 +170,10 @@ class _AchievementPlateState extends State<AchievementPlate>
   @override
   void initState() {
     super.initState();
-    _gleam = AnimationController(vsync: this, duration: const Duration(seconds: 6));
+    _gleam = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 6),
+    );
   }
 
   @override
@@ -182,10 +202,19 @@ class _AchievementPlateState extends State<AchievementPlate>
         : const Color(0x598E86AE);
 
     final (medalRim, medalIcon) = a.unlocked
-        ? (const [Color(0xFFF7D982), Color(0xFFB8862B)], const Color(0xFFFFE7A3))
+        ? (
+            const [Color(0xFFF7D982), Color(0xFFB8862B)],
+            const Color(0xFFFFE7A3),
+          )
         : secret
-        ? (const [Color(0xFFA79FC4), Color(0xFF4F4878)], const Color(0xFFD9D3EC))
-        : (const [Color(0xFFC9C3DC), Color(0xFF6E6790)], const Color(0xFFC9C3DC));
+        ? (
+            const [Color(0xFFA79FC4), Color(0xFF4F4878)],
+            const Color(0xFFD9D3EC),
+          )
+        : (
+            const [Color(0xFFC9C3DC), Color(0xFF6E6790)],
+            const Color(0xFFC9C3DC),
+          );
 
     return Semantics(
       label: [
@@ -218,7 +247,11 @@ class _AchievementPlateState extends State<AchievementPlate>
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [rim.withValues(alpha: 0), rim, rim.withValues(alpha: 0)],
+                    colors: [
+                      rim.withValues(alpha: 0),
+                      rim,
+                      rim.withValues(alpha: 0),
+                    ],
                   ),
                 ),
               ),
@@ -273,7 +306,9 @@ class _AchievementPlateState extends State<AchievementPlate>
                             fontWeight: FontWeight.w800,
                             fontSize: 17,
                             height: 1.25,
-                            color: secret ? const Color(0xFFC9C1DA) : Colors.white,
+                            color: secret
+                                ? const Color(0xFFC9C1DA)
+                                : Colors.white,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -410,7 +445,9 @@ class _Medallion extends StatelessWidget {
                     size: 26,
                     color: iconColor,
                     shadows: glow
-                        ? const [Shadow(color: Color(0x99F7D982), blurRadius: 6)]
+                        ? const [
+                            Shadow(color: Color(0x99F7D982), blurRadius: 6),
+                          ]
                         : null,
                   ),
                 ),

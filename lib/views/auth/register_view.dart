@@ -150,7 +150,9 @@ class _RegisterFormState extends State<_RegisterForm> {
               AuthSwitch(
                 question: '¿Ya tienes cuenta?',
                 action: 'Inicia sesión',
-                onTap: vm.isLoading ? null : () => Navigator.of(context).maybePop(),
+                onTap: vm.isLoading
+                    ? null
+                    : () => Navigator.of(context).maybePop(),
               ),
               if (!vm.acceptedPrivacy)
                 Padding(

@@ -216,7 +216,10 @@ class _SkySceneState extends State<SkyScene>
                   builder: (_, child) {
                     final t = Curves.easeInOut.transform(_bob.value);
                     final dy = (reverse ? 1 - t : t) * -0.016 * h;
-                    return Transform.translate(offset: Offset(0, dy), child: child);
+                    return Transform.translate(
+                      offset: Offset(0, dy),
+                      child: child,
+                    );
                   },
                   child: child,
                 );
@@ -308,7 +311,7 @@ class _FloatingSpriteState extends State<FloatingSprite>
             children: [
               Transform.translate(
                 offset: Offset(0, -8 * t),
-child: PixelImage(widget.asset, height: widget.height),
+                child: PixelImage(widget.asset, height: widget.height),
               ),
               Transform.scale(
                 scaleX: 1 - 0.2 * t,
@@ -545,17 +548,44 @@ class _AppButtonState extends State<AppButton> {
     final p = context.palette;
     final enabled = widget.onPressed != null && !widget.loading;
     final (bg, fg, border, glow) = switch (widget.variant) {
-      ButtonVariant.primary => (p.primary, p.onPrimary, Colors.transparent, p.glowPrimary),
-      ButtonVariant.promise => (p.promise, p.onPromise, Colors.transparent, p.glowPromise),
-      ButtonVariant.danger => (p.danger, p.onDanger, Colors.transparent, const <BoxShadow>[]),
-      ButtonVariant.outline => (p.glassStrong, p.text, p.glassBorder, p.shadowGlass),
-      ButtonVariant.ghost => (Colors.transparent, p.text, Colors.transparent, const <BoxShadow>[]),
+      ButtonVariant.primary => (
+        p.primary,
+        p.onPrimary,
+        Colors.transparent,
+        p.glowPrimary,
+      ),
+      ButtonVariant.promise => (
+        p.promise,
+        p.onPromise,
+        Colors.transparent,
+        p.glowPromise,
+      ),
+      ButtonVariant.danger => (
+        p.danger,
+        p.onDanger,
+        Colors.transparent,
+        const <BoxShadow>[],
+      ),
+      ButtonVariant.outline => (
+        p.glassStrong,
+        p.text,
+        p.glassBorder,
+        p.shadowGlass,
+      ),
+      ButtonVariant.ghost => (
+        Colors.transparent,
+        p.text,
+        Colors.transparent,
+        const <BoxShadow>[],
+      ),
     };
 
     return Semantics(
       button: true,
       enabled: enabled,
-      label: widget.loading ? (widget.loadingLabel ?? widget.label) : widget.label,
+      label: widget.loading
+          ? (widget.loadingLabel ?? widget.label)
+          : widget.label,
       excludeSemantics: true,
       child: AnimatedOpacity(
         duration: AppMotion.fast,
@@ -584,18 +614,24 @@ class _AppButtonState extends State<AppButton> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
-                    mainAxisSize: widget.expand ? MainAxisSize.max : MainAxisSize.min,
+                    mainAxisSize: widget.expand
+                        ? MainAxisSize.max
+                        : MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (widget.loading)
                         SizedBox(
                           width: 16,
                           height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: fg),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: fg,
+                          ),
                         )
                       else if (widget.icon != null)
                         Icon(widget.icon, size: 18, color: fg),
-                      if (widget.loading || widget.icon != null) const SizedBox(width: 8),
+                      if (widget.loading || widget.icon != null)
+                        const SizedBox(width: 8),
                       Flexible(
                         child: Text(
                           widget.loading
@@ -626,7 +662,12 @@ enum ChipTone { neutral, promise, primary, gold, success, hud }
 
 /// Etiqueta pequeña (personaje, capítulo, tiempo…).
 class AppChip extends StatelessWidget {
-  const AppChip(this.label, {super.key, this.tone = ChipTone.neutral, this.icon});
+  const AppChip(
+    this.label, {
+    super.key,
+    this.tone = ChipTone.neutral,
+    this.icon,
+  });
 
   final String label;
   final ChipTone tone;
@@ -648,7 +689,9 @@ class AppChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(AppRadius.pill),
-        border: tone == ChipTone.neutral ? Border.all(color: p.glassBorder) : null,
+        border: tone == ChipTone.neutral
+            ? Border.all(color: p.glassBorder)
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -759,9 +802,8 @@ class ThemeToggleButton extends StatelessWidget {
     return IconButton(
       tooltip: dark ? 'Cambiar al tema claro' : 'Cambiar al tema oscuro',
       icon: Icon(dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined),
-      onPressed: () => context.read<ThemeController>().toggle(
-        Theme.of(context).brightness,
-      ),
+      onPressed: () =>
+          context.read<ThemeController>().toggle(Theme.of(context).brightness),
     );
   }
 }
@@ -796,7 +838,10 @@ class AlertBox extends StatelessWidget {
             Expanded(
               child: Text(
                 message,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                ),
               ),
             ),
           ],
@@ -922,7 +967,10 @@ class _EmptyStateState extends State<EmptyState>
                   children: [
                     Text(
                       widget.title,
-                      style: const TextStyle(fontFamily: AppFonts.pixel, fontSize: 19),
+                      style: const TextStyle(
+                        fontFamily: AppFonts.pixel,
+                        fontSize: 19,
+                      ),
                     ),
                     if (widget.text != null) ...[
                       const SizedBox(height: 4),
@@ -940,7 +988,10 @@ class _EmptyStateState extends State<EmptyState>
               animation: _blink,
               builder: (_, _) => Opacity(
                 opacity: _blink.value < 0.5 ? 1 : 0,
-                child: Text('▼', style: TextStyle(fontSize: 11, color: p.promise)),
+                child: Text(
+                  '▼',
+                  style: TextStyle(fontSize: 11, color: p.promise),
+                ),
               ),
             ),
           ),
@@ -1032,10 +1083,15 @@ class Rise extends StatelessWidget {
       tween: Tween(begin: 0, end: 1),
       duration: total,
       builder: (_, t, child) {
-        final v = AppMotion.ease.transform(((t - start) / (1 - start)).clamp(0, 1));
+        final v = AppMotion.ease.transform(
+          ((t - start) / (1 - start)).clamp(0, 1),
+        );
         return Opacity(
           opacity: v,
-          child: Transform.translate(offset: Offset(0, 16 * (1 - v)), child: child),
+          child: Transform.translate(
+            offset: Offset(0, 16 * (1 - v)),
+            child: child,
+          ),
         );
       },
       child: child,

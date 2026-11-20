@@ -111,7 +111,10 @@ class _SlotCard extends StatelessWidget {
                       top: 12,
                       left: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 1,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0x8C23202F),
                           borderRadius: BorderRadius.circular(AppRadius.pill),
@@ -141,14 +144,23 @@ class _SlotCard extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    AppChip(characterLabel(save.activeCharacter), tone: ChipTone.promise),
-                    AppChip(chapterLabel(save.currentChapter), tone: ChipTone.primary),
+                    AppChip(
+                      characterLabel(save.activeCharacter),
+                      tone: ChipTone.promise,
+                    ),
+                    AppChip(
+                      chapterLabel(save.currentChapter),
+                      tone: ChipTone.primary,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 12),
                 Text(
                   'Partida ${save.slot}',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 _Fact(
@@ -269,7 +281,10 @@ class _EmptySlot extends StatelessWidget {
             Container(
               width: 64,
               height: 64,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: p.primarySoft),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: p.primarySoft,
+              ),
               child: Icon(Icons.add_rounded, size: 30, color: p.primary),
             ),
             const SizedBox(height: 12),
@@ -278,7 +293,10 @@ class _EmptySlot extends StatelessWidget {
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
             ),
             const SizedBox(height: 4),
-            const Text('Ranura vacía', style: TextStyle(fontWeight: FontWeight.w700)),
+            const Text(
+              'Ranura vacía',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
             const SizedBox(height: 2),
             Text(
               'Empieza una partida nueva en el juego para usar esta ranura.',
