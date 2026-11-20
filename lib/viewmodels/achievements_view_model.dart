@@ -14,6 +14,6 @@ class AchievementsViewModel extends BaseViewModel {
   int get unlockedCount => _achievements.where((a) => a.unlocked).length;
 
   Future<void> load() => runTask(() async {
-        _achievements = await _repo.getMyAchievements();
-      });
+    _achievements = await _repo.getMyAchievements();
+  });
 }
