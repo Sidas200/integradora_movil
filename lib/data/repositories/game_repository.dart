@@ -18,12 +18,16 @@ class GameRepository {
 
   Future<List<SaveSummary>> getSaves() async {
     final json = await _api.get('/account/saves') as List<dynamic>;
-    return json.map((e) => SaveSummary.fromJson(e as Map<String, dynamic>)).toList();
+    return json
+        .map((e) => SaveSummary.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<Achievement>> getMyAchievements() async {
     final json = await _api.get('/account/achievements') as List<dynamic>;
-    final list = json.map((e) => Achievement.fromJson(e as Map<String, dynamic>)).toList();
+    final list = json
+        .map((e) => Achievement.fromJson(e as Map<String, dynamic>))
+        .toList();
     list.sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
     return list;
   }
@@ -34,7 +38,10 @@ class GameRepository {
       auth: false,
       query: {'page': page, 'size': size},
     );
-    return PageResult.fromJson(json as Map<String, dynamic>, NewsSummary.fromJson);
+    return PageResult.fromJson(
+      json as Map<String, dynamic>,
+      NewsSummary.fromJson,
+    );
   }
 
   Future<NewsPost> getNewsPost(String slug) async {
