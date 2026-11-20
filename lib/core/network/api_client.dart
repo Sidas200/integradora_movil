@@ -18,9 +18,9 @@ class ApiClient {
     required TokenStorage tokenStorage,
     http.Client? httpClient,
     String? baseUrl,
-  })  : _tokens = tokenStorage,
-        _http = httpClient ?? http.Client(),
-        _baseUrl = baseUrl ?? ApiConfig.baseUrl;
+  }) : _tokens = tokenStorage,
+       _http = httpClient ?? http.Client(),
+       _baseUrl = baseUrl ?? ApiConfig.baseUrl;
 
   final TokenStorage _tokens;
   final http.Client _http;
@@ -31,8 +31,11 @@ class ApiClient {
 
   Future<void>? _refreshing;
 
-  Future<dynamic> get(String path, {Map<String, dynamic>? query, bool auth = true}) =>
-      _send('GET', path, query: query, auth: auth);
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic>? query,
+    bool auth = true,
+  }) => _send('GET', path, query: query, auth: auth);
 
   Future<dynamic> post(String path, {Object? body, bool auth = true}) =>
       _send('POST', path, body: body, auth: auth);
@@ -69,7 +72,14 @@ class ApiClient {
     if (response.statusCode == 401 && auth && !retried) {
       final refreshed = await _tryRefresh();
       if (refreshed) {
-        return _send(method, path, query: query, body: body, auth: auth, retried: true);
+        return _send(
+          method,
+          path,
+          query: query,
+          body: body,
+          auth: auth,
+          retried: true,
+        );
       }
       onSessionExpired?.call();
     }
@@ -120,12 +130,14 @@ class ApiClient {
   Future<void> _doRefresh() async {
     final refreshToken = await _tokens.readRefreshToken();
     if (refreshToken == null) throw StateError('Sin refresh token');
-    final json = await _send(
-      'POST',
-      '/auth/refresh',
-      body: {'refreshToken': refreshToken},
-      auth: false,
-    ) as Map<String, dynamic>;
+    final json =
+        await _send(
+              'POST',
+              '/auth/refresh',
+              body: {'refreshToken': refreshToken},
+              auth: false,
+            )
+            as Map<String, dynamic>;
     await _tokens.save(
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String?,
