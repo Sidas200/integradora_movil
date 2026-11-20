@@ -1,0 +1,13 @@
+# Fin de línea uniforme entre Windows y macOS.
+* text=auto
+# Los scripts y workflows se ejecutan en runners Linux; un fin de línea CRLF los rompe.
+*.sh    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.dart  text eol=lf
+*.kts   text eol=lf
+# Binarios
+*.png   binary
+*.jpg   binary
+*.jks   binary
+*.keystore binary

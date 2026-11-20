@@ -36,12 +36,16 @@ class MemoryTokenStorage extends TokenStorage {
 const _base = 'http://api.test/api/v1';
 
 Map<String, dynamic> _tokens(String access, String refresh) => {
-      'accessToken': access,
-      'tokenType': 'Bearer',
-      'expiresInSec': 900,
-      'refreshToken': refresh,
-      'player': {'id': '6f1c2a7e-0b7d-4e7a-9a0e-3d1f5b2c9e11', 'username': 'Felc', 'email': 'felc@example.com'},
-    };
+  'accessToken': access,
+  'tokenType': 'Bearer',
+  'expiresInSec': 900,
+  'refreshToken': refresh,
+  'player': {
+    'id': '6f1c2a7e-0b7d-4e7a-9a0e-3d1f5b2c9e11',
+    'username': 'Felc',
+    'email': 'felc@example.com',
+  },
+};
 
 const _account = {
   'id': '6f1c2a7e-0b7d-4e7a-9a0e-3d1f5b2c9e11',
@@ -61,10 +65,10 @@ const _account = {
 };
 
 http.Response _json(Object body, int status) => http.Response(
-      jsonEncode(body),
-      status,
-      headers: {'content-type': 'application/json; charset=utf-8'},
-    );
+  jsonEncode(body),
+  status,
+  headers: {'content-type': 'application/json; charset=utf-8'},
+);
 
 void main() {
   test('login envía client MOBILE y guarda los tokens', () async {
@@ -80,8 +84,10 @@ void main() {
       }),
     );
 
-    final player = await AuthRepository(api: api, tokens: storage)
-        .login(email: 'felc@example.com', password: 'secret123');
+    final player = await AuthRepository(
+      api: api,
+      tokens: storage,
+    ).login(email: 'felc@example.com', password: 'secret123');
 
     expect(sent['client'], 'MOBILE');
     expect(player.username, 'Felc');
@@ -94,17 +100,30 @@ void main() {
     final api = ApiClient(
       tokenStorage: storage,
       baseUrl: _base,
-      httpClient: MockClient((_) async => _json(
-            {'type': 'x', 'title': 'Unauthenticated', 'status': 401, 'code': 'INVALID_CREDENTIALS'},
-            401,
-          )),
+      httpClient: MockClient(
+        (_) async => _json({
+          'type': 'x',
+          'title': 'Unauthenticated',
+          'status': 401,
+          'code': 'INVALID_CREDENTIALS',
+        }, 401),
+      ),
     );
 
     expect(
-      () => AuthRepository(api: api, tokens: storage).login(email: 'a@b.c', password: 'x'),
-      throwsA(isA<ApiException>()
-          .having((e) => e.code, 'code', 'INVALID_CREDENTIALS')
-          .having((e) => e.userMessage, 'msg', 'Correo o contraseña incorrectos.')),
+      () => AuthRepository(
+        api: api,
+        tokens: storage,
+      ).login(email: 'a@b.c', password: 'x'),
+      throwsA(
+        isA<ApiException>()
+            .having((e) => e.code, 'code', 'INVALID_CREDENTIALS')
+            .having(
+              (e) => e.userMessage,
+              'msg',
+              'Correo o contraseña incorrectos.',
+            ),
+      ),
     );
   });
 
@@ -117,13 +136,20 @@ void main() {
       tokenStorage: storage,
       baseUrl: _base,
       httpClient: MockClient((req) async {
-        calls.add('${req.method} ${req.url.path} ${req.headers['Authorization'] ?? ''}');
+        calls.add(
+          '${req.method} ${req.url.path} ${req.headers['Authorization'] ?? ''}',
+        );
         if (req.url.path.endsWith('/auth/refresh')) {
           expect(jsonDecode(req.body), {'refreshToken': 'r-old'});
           return _json(_tokens('new', 'r-new'), 200);
         }
         if (req.headers['Authorization'] == 'Bearer old') {
-          return _json({'type': 'x', 'title': 'x', 'status': 401, 'code': 'TOKEN_EXPIRED'}, 401);
+          return _json({
+            'type': 'x',
+            'title': 'x',
+            'status': 401,
+            'code': 'TOKEN_EXPIRED',
+          }, 401);
         }
         return _json(_account, 200);
       }),
@@ -149,11 +175,20 @@ void main() {
     final api = ApiClient(
       tokenStorage: storage,
       baseUrl: _base,
-      httpClient: MockClient((_) async =>
-          _json({'type': 'x', 'title': 'x', 'status': 401, 'code': 'INVALID_SESSION'}, 401)),
+      httpClient: MockClient(
+        (_) async => _json({
+          'type': 'x',
+          'title': 'x',
+          'status': 401,
+          'code': 'INVALID_SESSION',
+        }, 401),
+      ),
     )..onSessionExpired = () => expired = true;
 
-    await expectLater(GameRepository(api: api).getAccount(), throwsA(isA<ApiException>()));
+    await expectLater(
+      GameRepository(api: api).getAccount(),
+      throwsA(isA<ApiException>()),
+    );
     expect(expired, isTrue);
   });
 
@@ -164,17 +199,46 @@ void main() {
       httpClient: MockClient((req) async {
         if (req.url.path.endsWith('/account/achievements')) {
           return _json([
-            {'id': 'b', 'name': '???', 'description': null, 'iconKey': null, 'hidden': true, 'sortOrder': 30, 'unlocked': false, 'unlockedAt': null},
-            {'id': 'first_craft', 'name': 'El poder se fabrica', 'description': 'Fabrica tu primer objeto.', 'iconKey': 'x', 'hidden': false, 'sortOrder': 20, 'unlocked': true, 'unlockedAt': '2026-10-10T01:53:00Z'},
+            {
+              'id': 'b',
+              'name': '???',
+              'description': null,
+              'iconKey': null,
+              'hidden': true,
+              'sortOrder': 30,
+              'unlocked': false,
+              'unlockedAt': null,
+            },
+            {
+              'id': 'first_craft',
+              'name': 'El poder se fabrica',
+              'description': 'Fabrica tu primer objeto.',
+              'iconKey': 'x',
+              'hidden': false,
+              'sortOrder': 20,
+              'unlocked': true,
+              'unlockedAt': '2026-10-10T01:53:00Z',
+            },
           ], 200);
         }
         expect(req.headers.containsKey('Authorization'), isFalse);
         expect(req.url.queryParameters, {'page': '0', 'size': '20'});
         return _json({
           'content': [
-            {'slug': 'hola', 'title': 'Hola', 'summary': 'Resumen', 'coverKey': null, 'publishedAt': '2026-10-01T00:00:00Z'},
+            {
+              'slug': 'hola',
+              'title': 'Hola',
+              'summary': 'Resumen',
+              'coverKey': null,
+              'publishedAt': '2026-10-01T00:00:00Z',
+            },
           ],
-          'page': {'number': 0, 'size': 20, 'totalElements': 1, 'totalPages': 1},
+          'page': {
+            'number': 0,
+            'size': 20,
+            'totalElements': 1,
+            'totalPages': 1,
+          },
         }, 200);
       }),
     );
