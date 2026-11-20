@@ -1,5 +1,5 @@
 name: integradora_movil
-description: "A new Flutter project."
+description: "TDIMTP: app compañera de The Day I Made That Promise."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -48,6 +48,20 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+# Ícono de la app: el emblema de la PWA (espada carmesí sobre la luna).
+# Regenerar con: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: assets/branding/icon.png
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "#040733"
+  adaptive_icon_foreground: assets/branding/icon-maskable.png
+  macos:
+    generate: true
+    image_path: assets/branding/icon.png
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -59,6 +73,30 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/art/
+
+  # Tipografías del diseño de la PWA (licencia OFL, ver assets/fonts/OFL-*.txt).
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-400.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-500.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-600.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-700.ttf
+          weight: 700
+        - asset: assets/fonts/PlusJakartaSans-800.ttf
+          weight: 800
+    - family: PixelifySans
+      fonts:
+        - asset: assets/fonts/PixelifySans-400.ttf
+          weight: 400
+        - asset: assets/fonts/PixelifySans-500.ttf
+          weight: 500
 
   # To add assets to your application, add an assets section, like this:
   # assets:
