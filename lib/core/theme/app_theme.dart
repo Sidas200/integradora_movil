@@ -221,6 +221,9 @@ class AppFonts {
 
   /// Cifras del juego y "eyebrows".
   static const pixel = 'PixelifySans';
+
+  /// Título del juego en letras (serif romana, mayúsculas).
+  static const title = 'Cinzel';
 }
 
 /// Radios del diseño: esquinas suaves, cercanas al pixel art.

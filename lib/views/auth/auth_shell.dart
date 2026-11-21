@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../widgets/app_widgets.dart';
 
-/// Marco de inicio de sesión y registro (AuthShell de la PWA): el logo, una tarjeta de vidrio
+/// Marco de inicio de sesión y registro (AuthShell de la PWA): el título en letras, una tarjeta de vidrio
 /// con un lado ilustrado (cielo, isla y el personaje) y el formulario debajo.
 class AuthShell extends StatelessWidget {
   const AuthShell({
@@ -37,7 +37,7 @@ class AuthShell extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Center(child: BrandWordmark(height: 104)),
+                        const Center(child: BrandTitle(width: 220)),
                         const SizedBox(height: 16),
                         Rise(
                           child: Glass(

@@ -99,15 +99,7 @@ class _Root extends StatelessWidget {
                 padding: EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    BrandWordmark(height: 150),
-                    SizedBox(height: 28),
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: CircularProgressIndicator(strokeWidth: 3),
-                    ),
-                  ],
+                  children: [SpinningSword(size: 112)],
                 ),
               ),
             ),
