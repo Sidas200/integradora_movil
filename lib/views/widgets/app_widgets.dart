@@ -89,6 +89,73 @@ class BrandWordmark extends StatelessWidget {
   );
 }
 
+/// Título del juego en letras: "THE DAY I MADE" espaciado arriba y "THAT / PROMISE"
+/// grandes, con un degradado vertical de blanco a rosa (oscuro) o de tinta a carmesí (claro).
+class BrandTitle extends StatelessWidget {
+  const BrandTitle({super.key, this.width = 320});
+
+  /// Ancho de la palabra más larga ("PROMISE"); todo escala a partir de él.
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final colors = p.isDark
+        ? const [Color(0xFFF4F2F8), Color(0xFFE3DCEA), Color(0xFFE2AFC8)]
+        : [p.text, const Color(0xFF4A3466), p.promise];
+    const big = TextStyle(
+      fontFamily: AppFonts.title,
+      fontWeight: FontWeight.w600,
+      fontVariations: [FontVariation.weight(600)],
+      fontSize: 100,
+      height: 0.92,
+      letterSpacing: 2,
+    );
+    return Semantics(
+      label: 'The Day I Made That Promise',
+      header: true,
+      child: ExcludeSemantics(
+        child: SizedBox(
+          width: width,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: ShaderMask(
+              blendMode: BlendMode.srcIn,
+              shaderCallback: (rect) => LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: colors,
+                stops: const [0, 0.5, 1],
+              ).createShader(rect),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.only(left: 6, bottom: 6),
+                    child: Text(
+                      'THE DAY I MADE',
+                      style: TextStyle(
+                        fontFamily: AppFonts.title,
+                        fontWeight: FontWeight.w600,
+                        fontVariations: [FontVariation.weight(600)],
+                        fontSize: 34,
+                        letterSpacing: 13,
+                      ),
+                    ),
+                  ),
+                  Text('THAT', style: big),
+                  Text('PROMISE', style: big),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 /// Emblema: la espada carmesí sobre la luna, en su cuadro nocturno.
 class LogoMark extends StatelessWidget {
   const LogoMark({super.key, this.size = 36});
@@ -1097,4 +1164,149 @@ class Rise extends StatelessWidget {
       child: child,
     );
   }
+}
+
+/// Indicador de carga: la espada carmesí en pixel art girando sobre un halo rosa.
+/// Con animaciones reducidas (accesibilidad) se queda quieta.
+class SpinningSword extends StatefulWidget {
+  const SpinningSword({super.key, this.size = 96});
+
+  final double size;
+
+  @override
+  State<SpinningSword> createState() => _SpinningSwordState();
+}
+
+class _SpinningSwordState extends State<SpinningSword>
+    with SingleTickerProviderStateMixin {
+  late final _spin = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1600),
+  );
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (MediaQuery.of(context).disableAnimations) {
+      _spin.stop();
+    } else if (!_spin.isAnimating) {
+      _spin.repeat();
+    }
+  }
+
+  @override
+  void dispose() {
+    _spin.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final p = context.palette;
+    final s = widget.size;
+    return Semantics(
+      label: 'Cargando',
+      child: SizedBox(
+        width: s,
+        height: s,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    p.promiseGlow.withValues(alpha: 0.35),
+                    p.promiseGlow.withValues(alpha: 0),
+                  ],
+                ),
+              ),
+              child: SizedBox(width: s, height: s),
+            ),
+            RotationTransition(
+              turns: _spin,
+              child: CustomPaint(
+                size: Size(s * 12 / 32 * 0.8, s * 0.8),
+                painter: const _SwordPainter(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SwordPainter extends CustomPainter {
+  const _SwordPainter();
+
+  // 12 × 32 píxeles: hoja, guarda dorada, mango y pomo.
+  static const _rows = [
+    '.....DD.....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '....DWRD....',
+    '.DDDDDDDDDD.',
+    'DGgGGGGGGgGD',
+    '.DDDDDDDDDD.',
+    '....DHhD....',
+    '....DhHD....',
+    '....DHhD....',
+    '....DhHD....',
+    '....DHhD....',
+    '....DhHD....',
+    '...DDDDDD...',
+    '...DGgGGD...',
+    '...DDDDDD...',
+  ];
+
+  static const _colors = {
+    'D': Color(0xFF3A0A1E),
+    'R': Color(0xFFC8243F),
+    'W': Color(0xFFFF8FA8),
+    'G': Color(0xFFE8B04A),
+    'g': Color(0xFFFFE19A),
+    'H': Color(0xFF5A2A3A),
+    'h': Color(0xFF7A3A4E),
+  };
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final px = size.height / _rows.length;
+    final dx = (size.width - px * _rows.first.length) / 2;
+    final paint = Paint()..isAntiAlias = false;
+    for (var y = 0; y < _rows.length; y++) {
+      final row = _rows[y];
+      for (var x = 0; x < row.length; x++) {
+        final c = _colors[row[x]];
+        if (c == null) continue;
+        paint.color = c;
+        // +0.5 para que no queden rendijas entre píxeles al girar.
+        canvas.drawRect(
+          Rect.fromLTWH(dx + x * px, y * px, px + 0.5, px + 0.5),
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_SwordPainter oldDelegate) => false;
 }
