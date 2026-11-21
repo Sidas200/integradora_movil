@@ -1,11 +1,11 @@
 {
-    "name": "integradora_movil",
-    "short_name": "integradora_movil",
+    "name": "TDIMTP",
+    "short_name": "TDIMTP",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F6EEF6",
+    "theme_color": "#5B45C2",
+    "description": "App compañera de The Day I Made That Promise.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -43,3 +43,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Secretos y entorno (los lee infra/scripts/setup/load-secrets.sh; nunca se versionan)
+.env
+.env.*
+secrets.*.env
+*.jks
+*.keystore
+key.properties
+
+# Salidas locales de los scripts de CI (APK en artifacts/)
+artifacts/
